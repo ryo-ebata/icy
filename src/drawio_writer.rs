@@ -71,9 +71,10 @@ fn draw_node(
     writer.write(XmlEvent::end_element())?; // mxCell
 
     for (i, attr) in node.attributes.iter().enumerate() {
+        let attr_id = *id;
         *id += 1;
         writer.write(XmlEvent::start_element("mxCell")
-            .attr("id", &id.to_string())
+            .attr("id", &attr_id.to_string())
             .attr("value", &format!("{}: {}", attr.key, attr.value))
             .attr("style", "text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;")
             .attr("vertex", "1")
