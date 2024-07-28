@@ -1,4 +1,4 @@
-use crate::ast::{ASTNode, AST};
+use crate::hcl::{ASTNode, AST};
 use std::io::Cursor;
 use xml::writer::{EmitterConfig, EventWriter, XmlEvent};
 
