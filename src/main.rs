@@ -1,9 +1,12 @@
+mod cli;
 mod drawio;
 mod hcl;
 
 use clap::Parser;
 use std::fs;
 use std::io::Write;
+use std::thread;
+use std::time::Duration;
 
 #[derive(Parser, Debug)]
 #[command(version, about)]
@@ -13,6 +16,13 @@ struct Args {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let _pb = cli::pg::init_progress_bar();
+
+    for _ in 0..100 {
+        thread::sleep(Duration::from_millis(5));
+        cli::pg::increment_progress();
+    }
+
     let args = Args::parse();
 
     // Read the HCL file
@@ -48,5 +58,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Err(e) => eprintln!("Error parsing HCL: {}", e),
     }
 
+    cli::pg::finish_progress();
     Ok(())
 }

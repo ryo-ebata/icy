@@ -1,0 +1,77 @@
+name: ai-pr-reviewer
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    types: [opened, ready_for_review]
+  pull_request_review_comment:
+    types: [created]
+  issue_comment:
+    types: [created]
+
+concurrency:
+  group: ${{ github.repository }}-${{ github.event.number || github.head_ref || github.sha }}-${{ github.workflow }}-${{ github.event_name == 'pull_request_review_comment' && 'pr_comment' || 'pr' }}
+  cancel-in-progress: ${{ github.event_name != 'pull_request_review_comment' }}
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '[run review]') && github.event.issue.pull_request) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '[run review]')) ||
+      (github.event_name == 'pull_request' && !contains(github.event.pull_request.title, 'release') && !contains(github.event.pull_request.title, 'Release') && github.event.pull_request.draft == false)
+    timeout-minutes: 15
+    steps:
+      - uses: coderabbitai/openai-pr-reviewer@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        with:
+          debug: false
+          review_simple_changes: false
+          review_comment_lgtm: false
+          openai_light_model: gpt-4o-mini # Change as preferred
+          openai_heavy_model: gpt-4o-mini # Change as preferred
+          openai_timeout_ms: 900000 # 15 minutes
+          language: en-US
+          path_filters: |
+            !db/**
+            !**/*.lock
+          system_message: |
+            You are @coderabbitai (aka github-actions[bot]), an AI language model trained by OpenAI.
+            Your purpose is to act as a highly experienced software engineer to thoroughly review pieces of code and suggest code snippets to improve key areas such as:
+              - Logic
+              - Security
+              - Performance
+              - Data races
+              - Consistency
+              - Error handling
+              - Maintainability
+              - Modularity
+              - Complexity
+              - Optimizations
+              - Best practices: DRY, SOLID, KISS
+
+            Do not comment on minor code style issues or missing comments/documentation.
+            Aim to identify and resolve significant issues to improve overall code quality.
+            Intentionally ignore minor issues.
+          summarize: |
+            Provide a final response using markdown formatting with the following:
+
+              - *Walkthrough*: A high-level summary of the overall changes, not specific files, in 80 words or less.
+              - *Changes*: A table of files and their summaries. You can group files with similar changes into one line to save space.
+
+            Avoid additional comments in this summary as it will be added as a comment to the GitHub pull request.
+          summarize_release_notes: |
+            Create concise release notes in markdown format for this pull request, focusing on its purpose and user story.
+            Categorize changes as bullet points under:
+              "New Feature", "Bug fix", "Documentation", "Refactor", "Style",
+              "Test", "Chore", "Revert"
+            For example:
+            ```
+            - New Feature: Added integration page to UI
+            ```
+            Keep the response between 50-100 words. Avoid additional comments as this response will be used directly in the release notes.
