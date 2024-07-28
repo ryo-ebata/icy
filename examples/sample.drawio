@@ -1,0 +1,22 @@
+<mxfile host="65bd71144e">
+    <diagram id="N51MXJlQSbjf3pdGWXe4" name="ページ1">
+        <mxGraphModel dx="1096" dy="314" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="resource&#10;aws_instance, example" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="100" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="ami: ami-12345678" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="2" vertex="1">
+                    <mxGeometry y="80" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="instance_type: t2.micro" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="2" vertex="1">
+                    <mxGeometry y="100" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="tags: Object(VecMap { base: [Slot { data: (Identifier(Identifier(Name)), String(&quot;example-instance&quot;)) }] })" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="150" width="120" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
