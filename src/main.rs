@@ -1,4 +1,4 @@
-mod drawio_writer;
+mod drawio;
 mod hcl;
 
 use clap::Parser;
@@ -18,11 +18,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Read the HCL file
     let hcl_content = fs::read_to_string(&args.hcl_file)?;
 
-    match hcl::parse_hcl(&hcl_content) {
+    match hcl::parser::parse_hcl(&hcl_content) {
         Ok(body) => {
             // Convert the HCL AST to a Draw.io diagram
-            let ast = hcl::AST::from_hcl_body(&body);
-            match drawio_writer::ast_to_drawio(&ast) {
+            let ast = hcl::ast::AST::from_hcl_body(&body);
+            match drawio::output::ast_to_drawio(&ast) {
                 Ok(drawio_output) => {
                     // Save the Draw.io diagram to a file
                     let drawio_file_name = args

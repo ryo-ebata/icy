@@ -1,4 +1,4 @@
-use crate::hcl::{ASTNode, AST};
+use crate::hcl::ast::{ASTNode, AST};
 use std::io::Cursor;
 use xml::writer::{EmitterConfig, EventWriter, XmlEvent};
 
@@ -41,6 +41,7 @@ fn draw_node(
     id: &mut i32,
     parent: i32,
 ) -> Result<(), xml::writer::Error> {
+    dbg!(&node);
     let node_id = *id;
     *id += 1;
 
