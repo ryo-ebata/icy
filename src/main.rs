@@ -1,7 +1,6 @@
 mod ast;
 mod drawio_writer;
 mod parser;
-mod xml_writer;
 
 use std::env;
 use std::fs;
