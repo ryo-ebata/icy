@@ -41,7 +41,6 @@ fn draw_node(
     id: &mut i32,
     parent: i32,
 ) -> Result<(), xml::writer::Error> {
-    dbg!(&node);
     let node_id = *id;
     *id += 1;
 
