@@ -7,13 +7,11 @@ pub fn ast_to_drawio(ast: &AST) -> Result<String, xml::writer::Error> {
         .perform_indent(true)
         .create_writer(Cursor::new(Vec::new()));
 
-    // Draw.ioヘッダー
     writer.write(XmlEvent::start_element("mxfile").attr("host", "app.diagrams.net"))?;
     writer.write(XmlEvent::start_element("diagram"))?;
     writer.write(XmlEvent::start_element("mxGraphModel"))?;
     writer.write(XmlEvent::start_element("root"))?;
 
-    // 背景セル
     writer.write(XmlEvent::start_element("mxCell").attr("id", "0"))?;
     writer.write(XmlEvent::end_element())?;
     writer.write(
@@ -23,13 +21,11 @@ pub fn ast_to_drawio(ast: &AST) -> Result<String, xml::writer::Error> {
     )?;
     writer.write(XmlEvent::end_element())?;
 
-    // ASTノードを描画
     let mut id = 2;
     for node in &ast.nodes {
         draw_node(&mut writer, node, &mut id, 1)?;
     }
 
-    // フッター
     writer.write(XmlEvent::end_element())?; // root
     writer.write(XmlEvent::end_element())?; // mxGraphModel
     writer.write(XmlEvent::end_element())?; // diagram
@@ -48,10 +44,9 @@ fn draw_node(
     let node_id = *id;
     *id += 1;
 
-    let x = 100 + (node_id - 2) * 200; // 簡単な配置ロジック
+    let x = 100 + (node_id - 2) * 200;
     let y = (parent - 1) * 100;
 
-    // ノード本体
     writer.write(
         XmlEvent::start_element("mxCell")
             .attr("id", &node_id.to_string())
