@@ -24,6 +24,26 @@ pub struct Attribute {
 }
 
 impl AST {
+    /// Create an AST from an HCL body
+    ///
+    /// This function is used to create an AST from an HCL body.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// let body =
+    ///    hcl::from_str("key = \"value\"").expect("Failed to parse HCL");
+    /// let ast = AST::from_hcl_body(&body);
+    /// ```
+    ///
+    /// # Arguments
+    ///
+    /// * `body` - The HCL body to convert to an AST
+    ///
+    /// # Returns
+    ///
+    /// An AST representing the HCL body
+    ///
     pub fn from_hcl_body(body: &Body) -> Self {
         let nodes = body
             .blocks()
@@ -32,6 +52,9 @@ impl AST {
         AST { nodes }
     }
 
+    /// Create a node from a block
+    ///
+    /// This function is used to create a node from a block.
     fn create_node(block: &Block) -> ASTNode {
         ASTNode {
             name: block.identifier().to_string(),
@@ -54,6 +77,9 @@ impl AST {
         }
     }
 
+    /// Convert a block label to a string
+    ///
+    /// This function is used to convert a block label to a string.
     fn block_label_to_string(label: &BlockLabel) -> String {
         match label {
             BlockLabel::String(s) => s.to_string(),
@@ -61,6 +87,18 @@ impl AST {
         }
     }
 
+    /// Convert an HCL attribute to an attribute
+    ///
+    /// This function is used to convert an HCL attribute to an attribute that can be used in the AST.
+    ///
+    /// # Usage
+    ///
+    /// ```
+    /// let attr = HclAttribute::new("key",
+    ///    Expression::String("value".to_string()));
+    /// let attribute = AST::hcl_attribute_to_attribute(&attr);
+    /// ```
+    ///
     fn hcl_attribute_to_attribute(attr: &HclAttribute) -> Attribute {
         Attribute {
             key: attr.key().to_string(),
@@ -68,12 +106,15 @@ impl AST {
         }
     }
 
+    /// Convert an HCL expression to a string
+    ///
+    /// This function is used to convert the value of an attribute to a string.
     fn expression_to_string(expr: &Expression) -> String {
         match expr {
             Expression::String(s) => s.to_string(),
             Expression::Number(n) => n.to_string(),
             Expression::Bool(b) => b.to_string(),
-            _ => format!("{:?}", expr), // その他の式タイプの場合はデバッグ出力を使用
+            _ => format!("{:?}", expr),
         }
     }
 }

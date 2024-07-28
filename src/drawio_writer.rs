@@ -21,7 +21,6 @@ pub fn ast_to_drawio(ast: &AST) -> Result<String, xml::writer::Error> {
     )?;
     writer.write(XmlEvent::end_element())?;
 
-    // ASTノードを描画
     let mut id = 2;
     for node in &ast.nodes {
         draw_node(&mut writer, node, &mut id, 1)?;
