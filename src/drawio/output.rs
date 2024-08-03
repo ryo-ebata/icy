@@ -35,6 +35,36 @@ pub fn ast_to_drawio(ast: &AST) -> Result<String, xml::writer::Error> {
     Ok(String::from_utf8(result).unwrap())
 }
 
+/// Draw a node in the Draw.io XML
+///
+/// This function is used to draw a node in the Draw.io XML.
+///
+/// # Arguments
+///
+/// * `writer` - The XML writer to write to
+/// * `node` - The AST node to draw
+/// * `id` - The ID of the node
+/// * `parent` - The ID of the parent node
+///
+/// # Returns
+///
+/// An XML writer with the node drawn
+///
+/// # Example
+///
+/// ```
+/// let mut writer = EmitterConfig::new()
+///    .perform_indent(true)
+///   .create_writer(Cursor::new(Vec::new()));
+/// let node = ASTNode {
+///   name: "node".to_string(),
+///  labels: vec!["label1".to_string(), "label2".to_string()],
+/// attributes: vec![Attribute { key: "key".to_string(), value: "value".to_string() }],
+/// blocks: vec![],
+/// };
+/// draw_node(&mut writer, &node, &mut 2, 1);
+/// ```
+///
 fn draw_node(
     writer: &mut EventWriter<Cursor<Vec<u8>>>,
     node: &ASTNode,
