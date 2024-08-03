@@ -9,5 +9,3 @@ edition = "2021"
 clap = { version = "4.5.4", features = ["derive"] }
 hcl-rs = "0.18.0"
 xml-rs = "0.8"
-indicatif = "0.17.8"
-lazy_static = "1.4.0"
